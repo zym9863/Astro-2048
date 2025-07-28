@@ -1,0 +1,245 @@
+/* ===================================
+   Global Styles & Resets
+   =================================== */
+
+/* Import Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Import JetBrains Mono for monospace elements */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Import CSS variables */
+@import './variables.css';
+
+/* ===================================
+   CSS Reset / Normalize
+   =================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===================================
+   Base Styles
+   =================================== */
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-dark);
+  
+  /* Full viewport gradient background */
+  background: linear-gradient(
+    135deg,
+    #faf8ef 0%,
+    #f5f3ea 25%,
+    #f0ede5 50%,
+    #ebe8e0 75%,
+    #e6e3db 100%
+  );
+  
+  /* Subtle noise texture overlay for depth */
+  position: relative;
+}
+
+/* Optional: Add a subtle pattern overlay */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.03;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 35px,
+      rgba(143, 122, 102, 0.1) 35px,
+      rgba(143, 122, 102, 0.1) 70px
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===================================
+   Main Container Layout
+   =================================== */
+
+/* Flexbox container for centering the game */
+.main-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-4);
+}
+
+/* ===================================
+   Typography Defaults
+   =================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-dark);
+}
+
+h1 { font-size: var(--font-size-5xl); }
+h2 { font-size: var(--font-size-4xl); }
+h3 { font-size: var(--font-size-3xl); }
+h4 { font-size: var(--font-size-2xl); }
+h5 { font-size: var(--font-size-xl); }
+h6 { font-size: var(--font-size-lg); }
+
+p {
+  margin-bottom: var(--spacing-4);
+}
+
+a {
+  color: var(--color-accent-primary);
+  text-decoration: none;
+  transition: var(--transition-colors);
+}
+
+a:hover {
+  color: var(--color-button-bg-hover);
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+/* ===================================
+   Focus Styles
+   =================================== */
+
+:focus {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+/* ===================================
+   Selection Styles
+   =================================== */
+
+::selection {
+  background-color: var(--color-accent-primary);
+  color: var(--color-text-light);
+}
+
+/* ===================================
+   Scrollbar Styles (Webkit)
+   =================================== */
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-cell-empty);
+  border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-board);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-cell-empty);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-primary);
+}
+
+/* ===================================
+   Dark Theme Support
+   =================================== */
+
+[data-theme="dark"] body {
+  background: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #1e1e1e 25%,
+    #222222 50%,
+    #262626 75%,
+    #2a2a2a 100%
+  );
+}
+
+[data-theme="dark"] body::before {
+  opacity: 0.02;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 35px,
+      rgba(255, 255, 255, 0.03) 35px,
+      rgba(255, 255, 255, 0.03) 70px
+    );
+}
+
+/* ===================================
+   Responsive Adjustments
+   =================================== */
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .main-container {
+    padding: var(--spacing-2);
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+  
+  h1 { font-size: var(--font-size-4xl); }
+  h2 { font-size: var(--font-size-3xl); }
+  h3 { font-size: var(--font-size-2xl); }
+  h4 { font-size: var(--font-size-xl); }
+  h5 { font-size: var(--font-size-lg); }
+  h6 { font-size: var(--font-size-base); }
+}

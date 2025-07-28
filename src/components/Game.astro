@@ -1,416 +1,169 @@
 ---
-let board = [
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0]
-];
-
-let score = 0;
-let gameOver = false;
-let win = false;
-
-function initializeGame() {
-  // 初始化游戏板
-  board = [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0]
-  ];
-  
-  // 添加两个初始方块
-  addRandomTile();
-  addRandomTile();
-  
-  score = 0;
-  gameOver = false;
-  win = false;
-}
-
-function addRandomTile() {
-  // 找到所有空位置
-  const emptyCells = [];
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      if (board[i][j] === 0) {
-        emptyCells.push({ row: i, col: j });
-      }
-    }
-  }
-  
-  // 如果有空位置，随机选择一个添加2或4
-  if (emptyCells.length > 0) {
-    const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-    board[randomCell.row][randomCell.col] = Math.random() < 0.9 ? 2 : 4;
-  }
-}
-
-// 移动方块逻辑
-function moveLeft() {
-  let moved = false;
-  for (let i = 0; i < 4; i++) {
-    let row = board[i].filter(val => val !== 0);
-    for (let j = 0; j < row.length - 1; j++) {
-      if (row[j] === row[j + 1]) {
-        row[j] *= 2;
-        score += row[j];
-        row[j + 1] = 0;
-        
-        // 检查是否达到2048
-        if (row[j] === 2048) {
-          win = true;
-        }
-      }
-    }
-    row = row.filter(val => val !== 0);
-    while (row.length < 4) {
-      row.push(0);
-    }
-    
-    // 检查是否有变化
-    for (let j = 0; j < 4; j++) {
-      if (board[i][j] !== row[j]) {
-        moved = true;
-      }
-      board[i][j] = row[j];
-    }
-  }
-  
-  return moved;
-}
-
-function moveRight() {
-  let moved = false;
-  for (let i = 0; i < 4; i++) {
-    let row = board[i].filter(val => val !== 0);
-    for (let j = row.length - 1; j > 0; j--) {
-      if (row[j] === row[j - 1]) {
-        row[j] *= 2;
-        score += row[j];
-        row[j - 1] = 0;
-        
-        // 检查是否达到2048
-        if (row[j] === 2048) {
-          win = true;
-        }
-      }
-    }
-    row = row.filter(val => val !== 0);
-    while (row.length < 4) {
-      row.unshift(0);
-    }
-    
-    // 检查是否有变化
-    for (let j = 0; j < 4; j++) {
-      if (board[i][j] !== row[j]) {
-        moved = true;
-      }
-      board[i][j] = row[j];
-    }
-  }
-  
-  return moved;
-}
-
-function moveUp() {
-  let moved = false;
-  for (let j = 0; j < 4; j++) {
-    let col = [];
-    for (let i = 0; i < 4; i++) {
-      if (board[i][j] !== 0) {
-        col.push(board[i][j]);
-      }
-    }
-    
-    for (let i = 0; i < col.length - 1; i++) {
-      if (col[i] === col[i + 1]) {
-        col[i] *= 2;
-        score += col[i];
-        col[i + 1] = 0;
-        
-        // 检查是否达到2048
-        if (col[i] === 2048) {
-          win = true;
-        }
-      }
-    }
-    
-    col = col.filter(val => val !== 0);
-    while (col.length < 4) {
-      col.push(0);
-    }
-    
-    // 检查是否有变化
-    for (let i = 0; i < 4; i++) {
-      if (board[i][j] !== col[i]) {
-        moved = true;
-      }
-      board[i][j] = col[i];
-    }
-  }
-  
-  return moved;
-}
-
-function moveDown() {
-  let moved = false;
-  for (let j = 0; j < 4; j++) {
-    let col = [];
-    for (let i = 0; i < 4; i++) {
-      if (board[i][j] !== 0) {
-        col.push(board[i][j]);
-      }
-    }
-    
-    for (let i = col.length - 1; i > 0; i--) {
-      if (col[i] === col[i - 1]) {
-        col[i] *= 2;
-        score += col[i];
-        col[i - 1] = 0;
-        
-        // 检查是否达到2048
-        if (col[i] === 2048) {
-          win = true;
-        }
-      }
-    }
-    
-    col = col.filter(val => val !== 0);
-    while (col.length < 4) {
-      col.unshift(0);
-    }
-    
-    // 检查是否有变化
-    for (let i = 0; i < 4; i++) {
-      if (board[i][j] !== col[i]) {
-        moved = true;
-      }
-      board[i][j] = col[i];
-    }
-  }
-  
-  return moved;
-}
-
-// 检查游戏是否结束
-function isGameOver() {
-  // 检查是否还有空位
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 4; j++) {
-      if (board[i][j] === 0) {
-        return false;
-      }
-    }
-  }
-  
-  // 检查是否还能合并
-  for (let i = 0; i < 4; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (board[i][j] === board[i][j + 1]) {
-        return false;
-      }
-    }
-  }
-  
-  for (let j = 0; j < 4; j++) {
-    for (let i = 0; i < 3; i++) {
-      if (board[i][j] === board[i + 1][j]) {
-        return false;
-      }
-    }
-  }
-  
-  return true;
-}
-
-// 处理键盘事件
-function handleKeyDown(event: KeyboardEvent) {
-  if (gameOver) return;
-  
-  let moved = false;
-  
-  switch (event.key) {
-    case 'ArrowLeft':
-      moved = moveLeft();
-      break;
-    case 'ArrowRight':
-      moved = moveRight();
-      break;
-    case 'ArrowUp':
-      moved = moveUp();
-      break;
-    case 'ArrowDown':
-      moved = moveDown();
-      break;
-    default:
-      return;
-  }
-  
-  // 如果有移动，则添加新方块并检查游戏状态
-  if (moved) {
-    addRandomTile();
-    gameOver = isGameOver();
-  }
-}
-
-// 初始化游戏
-initializeGame();
 ---
 
-<div class="game-container">
-  <div class="header">
-    <h1 class="title">2048</h1>
-    <div class="scores-container">
-      <div class="score-container">
-        <div class="score-title">SCORE</div>
-        <div class="score-value">{score}</div>
+<section class="game">
+  <div class="game__header">
+    <h1 class="game__title">2048</h1>
+    <div class="game__scores">
+      <div class="game__score">
+        <div class="game__score-title">SCORE</div>
+        <div class="game__score-value">0</div>
       </div>
     </div>
   </div>
   
-  <div class="game-explanation">
+  <div class="game__explanation">
     <p>Join the numbers and get to the <strong>2048 tile!</strong></p>
   </div>
   
-  <div class="game-board">
-    {board.map((row, rowIndex) => (
-      <div class="board-row" id={`row-${rowIndex}`}>
-        {row.map((cell, colIndex) => (
-          <div class={`cell ${cell !== 0 ? `cell-${cell}` : ''}`}>
-            {cell !== 0 ? cell : ''}
-          </div>
-        ))}
-      </div>
-    ))}
+  <div class="game__board">
+    <div class="game__board-row" id="row-0">
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+    </div>
+    <div class="game__board-row" id="row-1">
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+    </div>
+    <div class="game__board-row" id="row-2">
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+    </div>
+    <div class="game__board-row" id="row-3">
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+      <div class="game__cell"></div>
+    </div>
   </div>
   
-  <div class="game-explanation">
+  <div class="game__explanation">
     <p><strong>HOW TO PLAY:</strong> Use your <strong>arrow keys</strong> to move the tiles. When two tiles with the same number touch, they <strong>merge into one!</strong></p>
   </div>
   
-  <button class="restart-button">New Game</button>
-</div>
+  <button class="game__restart-button">New Game</button>
+</section>
 
 <style>
-  .game-container {
+  /* Import the modernized tile styles */
+  @import '../styles/tiles.css';
+  
+  .game {
     width: 500px;
     margin: 0 auto;
     padding: 20px;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: var(--font-family-primary);
   }
   
-  .header {
+  .game__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
   }
   
-  .title {
+  .game__title {
     font-size: 80px;
     font-weight: bold;
     margin: 0;
-    color: #776e65;
+    color: var(--color-text-dark);
   }
   
-  .scores-container {
+  .game__scores {
     display: flex;
     gap: 10px;
   }
   
-  .score-container {
-    background: #bbada0;
+  .game__score {
+    background: var(--color-board);
     padding: 10px 15px;
-    border-radius: 6px;
+    border-radius: 8px;
     text-align: center;
     min-width: 100px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
   
-  .score-title {
+  .game__score-title {
     font-size: 14px;
     font-weight: bold;
-    color: #eee4da;
+    color: var(--color-tile-2);
     text-transform: uppercase;
   }
   
-  .score-value {
+  .game__score-value {
     font-size: 24px;
     font-weight: bold;
-    color: white;
+    color: var(--color-text-light);
   }
   
-  .game-explanation {
+  .game__explanation {
     margin-bottom: 20px;
-    color: #776e65;
+    color: var(--color-text-dark);
   }
   
-  .game-board {
-    background: #bbada0;
-    border-radius: 6px;
+  .game__board {
+    background: var(--color-board);
+    border-radius: 8px;
     padding: 10px;
     position: relative;
     outline: none;
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
   
-  .board-row {
+  .game__board-row {
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
   }
   
-  .board-row:last-child {
+  .game__board-row:last-child {
     margin-bottom: 0;
   }
   
-  .cell {
+  .game__cell {
     width: 100px;
     height: 100px;
-    background: #cdc1b4;
-    border-radius: 3px;
+    background: var(--color-cell-empty);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 35px;
     font-weight: bold;
-    color: #776e65;
+    color: var(--color-text-dark);
   }
   
-  .cell-2 { background: #eee4da; }
-  .cell-4 { background: #ede0c8; }
-  .cell-8 { background: #f2b179; color: #f9f6f2; }
-  .cell-16 { background: #f59563; color: #f9f6f2; }
-  .cell-32 { background: #f67c5f; color: #f9f6f2; }
-  .cell-64 { background: #f65e3b; color: #f9f6f2; }
-  .cell-128 { background: #edcf72; color: #f9f6f2; font-size: 30px; }
-  .cell-256 { background: #edcc61; color: #f9f6f2; font-size: 30px; }
-  .cell-512 { background: #edc850; color: #f9f6f2; font-size: 30px; }
-  .cell-1024 { background: #edc53f; color: #f9f6f2; font-size: 25px; }
-  .cell-2048 { background: #edc22e; color: #f9f6f2; font-size: 25px; }
-  
-  .restart-button {
-    background: #8f7a66;
-    color: #f9f6f2;
+  .game__restart-button {
+    background: var(--color-button-bg);
+    color: var(--color-button-text);
     border: none;
-    border-radius: 3px;
+    border-radius: 8px;
     padding: 10px 20px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     margin-top: 20px;
     transition: background 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
   
-  .restart-button:hover {
-    background: #9f8a76;
+  .game__restart-button:hover {
+    background: var(--color-button-bg-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
   
-  .game-board:focus {
+  .game__board:focus {
     outline: none;
+    box-shadow: 0 0 0 3px var(--color-accent-primary);
   }
   
-  .game-message {
+  .game__message {
     position: absolute;
     top: 0;
     left: 0;
@@ -422,43 +175,84 @@ initializeGame();
     align-items: center;
     justify-content: center;
     text-align: center;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 40px;
     font-weight: bold;
-    color: #776e65;
+    color: var(--color-text-dark);
+    backdrop-filter: blur(3px);
   }
   
-  .game-message p {
+  .game__message p {
     margin: 0 0 20px;
   }
   
-  .try-again-button {
-    background: #8f7a66;
-    color: #f9f6f2;
+  .game__try-again-button {
+    background: var(--color-button-bg);
+    color: var(--color-button-text);
     border: none;
-    border-radius: 3px;
+    border-radius: 8px;
     padding: 10px 20px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     transition: background 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
   
-  .try-again-button:hover {
-    background: #9f8a76;
+  .game__try-again-button:hover {
+    background: var(--color-button-bg-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
   
-  .game-over {
+  .game__message--game-over {
     background: rgba(238, 228, 218, 0.73);
   }
   
-  .game-won {
+  .game__message--game-won {
     background: rgba(237, 194, 46, 0.5);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .game {
+      width: min(500px, 90vw);
+    }
+    
+    .game__title {
+      font-size: 60px;
+    }
+    
+    .game__cell {
+      width: calc((90vw - 60px) / 4);
+      height: calc((90vw - 60px) / 4);
+      max-width: 100px;
+      max-height: 100px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .game__title {
+      font-size: 48px;
+    }
+    
+    .game__score {
+      min-width: 80px;
+    }
+    
+    .game__board {
+      padding: 8px;
+    }
+    
+    .game__board-row {
+      gap: 8px;
+      margin-bottom: 8px;
+    }
   }
 </style>
 
 <script>
-  // 游戏状态
+  // Game state
   let board = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -466,58 +260,89 @@ initializeGame();
     [0, 0, 0, 0]
   ];
   
+  let previousBoard: number[][] = [];
   let score = 0;
   let gameOver = false;
   let win = false;
+  let isMoving = false; // Debounce flag to prevent input during animations
   
-  // DOM 元素
-  const scoreElement = document.querySelector('.score-value');
-  const boardElement = document.querySelector('.game-board');
+  // DOM elements
+  const scoreElement = document.querySelector('.game__score-value');
+  const boardElement = document.querySelector('.game__board');
   
-  function updateDisplay() {
-    // 更新分数
+  // Helper function to deep copy the board
+  function copyBoard(src: number[][]) {
+    return src.map(row => [...row]);
+  }
+  
+  // Update board display with animations
+  function updateDisplay(animate = false) {
+    // Update score
     if (scoreElement) {
       scoreElement.textContent = score.toString();
     }
     
-    // 更新游戏板
-    const rows = document.querySelectorAll('.board-row');
+    // Clear all animation classes first
+    const allCells = document.querySelectorAll('.game__cell');
+    allCells.forEach(cell => {
+      cell.classList.remove('game__cell--new', 'game__cell--merged', 
+                           'game__cell--slide-left', 'game__cell--slide-right',
+                           'game__cell--slide-up', 'game__cell--slide-down');
+    });
+    
+    // Update board cells
+    const rows = document.querySelectorAll('.game__board-row');
     rows.forEach((row, rowIndex) => {
-      const cells = row.querySelectorAll('.cell');
+      const cells = row.querySelectorAll('.game__cell');
       cells.forEach((cell, colIndex) => {
         const value = board[rowIndex][colIndex];
+        const prevValue = previousBoard[rowIndex] ? previousBoard[rowIndex][colIndex] : 0;
+        
+        // Update cell content and classes
         cell.textContent = value !== 0 ? value.toString() : '';
-        cell.className = `cell ${value !== 0 ? `cell-${value}` : ''}`;
+        cell.className = `game__cell ${value !== 0 ? `game__cell-${value}` : ''}`;
+        
+        // Add animation classes if animating
+        if (animate && value !== 0) {
+          // Check if this is a new tile
+          if (prevValue === 0 && value !== 0) {
+            cell.classList.add('game__cell--new');
+          }
+          // Check if this tile was merged
+          else if (value > prevValue && prevValue !== 0) {
+            cell.classList.add('game__cell--merged');
+          }
+        }
       });
     });
     
-    // 显示游戏结束或胜利消息
-    let gameMessage = document.querySelector('.game-message');
+    // Show game over or win message
+    let gameMessage = document.querySelector('.game__message');
     if (gameMessage) {
       gameMessage.remove();
     }
     
     if (gameOver && boardElement) {
       gameMessage = document.createElement('div');
-      gameMessage.className = 'game-message game-over';
+      gameMessage.className = 'game__message game__message--game-over';
       gameMessage.innerHTML = `
         <p>Game Over!</p>
-        <button class="try-again-button">Try Again</button>
+        <button class="game__try-again-button">Try Again</button>
       `;
       boardElement.appendChild(gameMessage);
-      const tryAgainButton = gameMessage.querySelector('.try-again-button');
+      const tryAgainButton = gameMessage.querySelector('.game__try-again-button');
       if (tryAgainButton) {
         tryAgainButton.addEventListener('click', initializeGame);
       }
-    } else if (win && !document.querySelector('.game-won') && boardElement) {
+    } else if (win && !document.querySelector('.game__message--game-won') && boardElement) {
       gameMessage = document.createElement('div');
-      gameMessage.className = 'game-message game-won';
+      gameMessage.className = 'game__message game__message--game-won';
       gameMessage.innerHTML = `
         <p>You Win!</p>
-        <button class="try-again-button">Play Again</button>
+        <button class="game__try-again-button">Play Again</button>
       `;
       boardElement.appendChild(gameMessage);
-      const playAgainButton = gameMessage.querySelector('.try-again-button');
+      const playAgainButton = gameMessage.querySelector('.game__try-again-button');
       if (playAgainButton) {
         playAgainButton.addEventListener('click', initializeGame);
       }
@@ -525,7 +350,7 @@ initializeGame();
   }
   
   function initializeGame() {
-    // 初始化游戏板
+    // Initialize board
     board = [
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -533,19 +358,22 @@ initializeGame();
       [0, 0, 0, 0]
     ];
     
-    // 添加两个初始方块
+    previousBoard = copyBoard(board);
+    
+    // Add two initial tiles
     addRandomTile();
     addRandomTile();
     
     score = 0;
     gameOver = false;
     win = false;
+    isMoving = false;
     
-    updateDisplay();
+    updateDisplay(false);
   }
   
   function addRandomTile() {
-    // 找到所有空位置
+    // Find all empty cells
     const emptyCells = [];
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 4; j++) {
@@ -555,42 +383,71 @@ initializeGame();
       }
     }
     
-    // 如果有空位置，随机选择一个添加2或4
+    // Add 2 or 4 to a random empty cell
     if (emptyCells.length > 0) {
       const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
       board[randomCell.row][randomCell.col] = Math.random() < 0.9 ? 2 : 4;
     }
   }
   
-  // 移动方块逻辑
+  // Apply slide animation based on direction
+  function applySlideAnimation(direction: string) {
+    const rows = document.querySelectorAll('.game__board-row');
+    rows.forEach((row, rowIndex) => {
+      const cells = row.querySelectorAll('.game__cell');
+      cells.forEach((cell, colIndex) => {
+        if (board[rowIndex][colIndex] !== 0) {
+          // Check if tile moved
+          if (previousBoard[rowIndex][colIndex] !== 0 && 
+              board[rowIndex][colIndex] === previousBoard[rowIndex][colIndex]) {
+            // Tile moved, apply appropriate animation
+            cell.classList.add(`game__cell--slide-${direction}`);
+          }
+        }
+      });
+    });
+  }
+  
+  // Move tiles logic
   function moveLeft() {
     let moved = false;
+    const newBoard = copyBoard(board);
+    
     for (let i = 0; i < 4; i++) {
       let row = board[i].filter(val => val !== 0);
+      
+      // Merge tiles
       for (let j = 0; j < row.length - 1; j++) {
         if (row[j] === row[j + 1]) {
           row[j] *= 2;
           score += row[j];
           row[j + 1] = 0;
           
-          // 检查是否达到2048
+          // Check for 2048
           if (row[j] === 2048 && !win) {
             win = true;
           }
         }
       }
+      
+      // Remove zeros and pad with zeros
       row = row.filter(val => val !== 0);
       while (row.length < 4) {
         row.push(0);
       }
       
-      // 检查是否有变化
+      // Check if row changed
       for (let j = 0; j < 4; j++) {
         if (board[i][j] !== row[j]) {
           moved = true;
         }
-        board[i][j] = row[j];
+        newBoard[i][j] = row[j];
       }
+    }
+    
+    if (moved) {
+      previousBoard = copyBoard(board);
+      board = newBoard;
     }
     
     return moved;
@@ -598,32 +455,43 @@ initializeGame();
   
   function moveRight() {
     let moved = false;
+    const newBoard = copyBoard(board);
+    
     for (let i = 0; i < 4; i++) {
       let row = board[i].filter(val => val !== 0);
+      
+      // Merge tiles from right
       for (let j = row.length - 1; j > 0; j--) {
         if (row[j] === row[j - 1]) {
           row[j] *= 2;
           score += row[j];
           row[j - 1] = 0;
           
-          // 检查是否达到2048
+          // Check for 2048
           if (row[j] === 2048 && !win) {
             win = true;
           }
         }
       }
+      
+      // Remove zeros and pad with zeros
       row = row.filter(val => val !== 0);
       while (row.length < 4) {
         row.unshift(0);
       }
       
-      // 检查是否有变化
+      // Check if row changed
       for (let j = 0; j < 4; j++) {
         if (board[i][j] !== row[j]) {
           moved = true;
         }
-        board[i][j] = row[j];
+        newBoard[i][j] = row[j];
       }
+    }
+    
+    if (moved) {
+      previousBoard = copyBoard(board);
+      board = newBoard;
     }
     
     return moved;
@@ -631,6 +499,8 @@ initializeGame();
   
   function moveUp() {
     let moved = false;
+    const newBoard = copyBoard(board);
+    
     for (let j = 0; j < 4; j++) {
       let col = [];
       for (let i = 0; i < 4; i++) {
@@ -639,31 +509,38 @@ initializeGame();
         }
       }
       
+      // Merge tiles
       for (let i = 0; i < col.length - 1; i++) {
         if (col[i] === col[i + 1]) {
           col[i] *= 2;
           score += col[i];
           col[i + 1] = 0;
           
-          // 检查是否达到2048
+          // Check for 2048
           if (col[i] === 2048 && !win) {
             win = true;
           }
         }
       }
       
+      // Remove zeros and pad with zeros
       col = col.filter(val => val !== 0);
       while (col.length < 4) {
         col.push(0);
       }
       
-      // 检查是否有变化
+      // Check if column changed
       for (let i = 0; i < 4; i++) {
         if (board[i][j] !== col[i]) {
           moved = true;
         }
-        board[i][j] = col[i];
+        newBoard[i][j] = col[i];
       }
+    }
+    
+    if (moved) {
+      previousBoard = copyBoard(board);
+      board = newBoard;
     }
     
     return moved;
@@ -671,6 +548,8 @@ initializeGame();
   
   function moveDown() {
     let moved = false;
+    const newBoard = copyBoard(board);
+    
     for (let j = 0; j < 4; j++) {
       let col = [];
       for (let i = 0; i < 4; i++) {
@@ -679,39 +558,46 @@ initializeGame();
         }
       }
       
+      // Merge tiles from bottom
       for (let i = col.length - 1; i > 0; i--) {
         if (col[i] === col[i - 1]) {
           col[i] *= 2;
           score += col[i];
           col[i - 1] = 0;
           
-          // 检查是否达到2048
+          // Check for 2048
           if (col[i] === 2048 && !win) {
             win = true;
           }
         }
       }
       
+      // Remove zeros and pad with zeros
       col = col.filter(val => val !== 0);
       while (col.length < 4) {
         col.unshift(0);
       }
       
-      // 检查是否有变化
+      // Check if column changed
       for (let i = 0; i < 4; i++) {
         if (board[i][j] !== col[i]) {
           moved = true;
         }
-        board[i][j] = col[i];
+        newBoard[i][j] = col[i];
       }
+    }
+    
+    if (moved) {
+      previousBoard = copyBoard(board);
+      board = newBoard;
     }
     
     return moved;
   }
   
-  // 检查游戏是否结束
+  // Check if game is over
   function isGameOver() {
-    // 检查是否还有空位
+    // Check for empty cells
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 4; j++) {
         if (board[i][j] === 0) {
@@ -720,7 +606,7 @@ initializeGame();
       }
     }
     
-    // 检查是否还能合并
+    // Check for possible merges
     for (let i = 0; i < 4; i++) {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] === board[i][j + 1]) {
@@ -740,59 +626,78 @@ initializeGame();
     return true;
   }
   
-  // 处理键盘事件
+  // Handle keyboard input
   function handleKeyDown(event: KeyboardEvent) {
-    if (gameOver) return;
+    if (gameOver || isMoving) return;
     
     let moved = false;
+    let direction = '';
     
     switch (event.key) {
       case 'ArrowLeft':
         event.preventDefault();
         moved = moveLeft();
+        direction = 'left';
         break;
       case 'ArrowRight':
         event.preventDefault();
         moved = moveRight();
+        direction = 'right';
         break;
       case 'ArrowUp':
         event.preventDefault();
         moved = moveUp();
+        direction = 'up';
         break;
       case 'ArrowDown':
         event.preventDefault();
         moved = moveDown();
+        direction = 'down';
         break;
       default:
         return;
     }
     
-    // 如果有移动，则添加新方块并检查游戏状态
+    // If tiles moved, animate and add new tile
     if (moved) {
-      addRandomTile();
-      gameOver = isGameOver();
-      updateDisplay();
+      isMoving = true;
+      
+      // First update display to show movement
+      updateDisplay(false);
+      applySlideAnimation(direction);
+      
+      // After slide animation, add new tile
+      setTimeout(() => {
+        addRandomTile();
+        gameOver = isGameOver();
+        updateDisplay(true); // Show new tile with animation
+        
+        // Re-enable input after all animations complete
+        setTimeout(() => {
+          isMoving = false;
+        }, 200);
+      }, 120); // Wait for slide animation to complete
     }
   }
   
-  // 当页面加载完成后初始化游戏
+  // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
-    // 添加键盘事件监听
+    // Add keyboard event listener
     document.addEventListener('keydown', handleKeyDown);
     
-    // 让游戏板可以获得焦点
+    // Make board focusable
     if (boardElement) {
       boardElement.setAttribute('tabindex', '0');
       (boardElement as HTMLElement).focus();
     }
     
-    // 添加新游戏按钮事件
-    const restartButton = document.querySelector('.restart-button');
+    // Add restart button event
+    const restartButton = document.querySelector('.game__restart-button');
     if (restartButton) {
       restartButton.addEventListener('click', initializeGame);
     }
     
-    // 初始化游戏
+    // Initialize game
     initializeGame();
   });
 </script>

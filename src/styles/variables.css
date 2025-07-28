@@ -1,0 +1,246 @@
+/* ===================================
+   2048 Game Design System Variables
+   =================================== */
+
+:root {
+  /* ===================================
+     COLOR PALETTE
+     =================================== */
+  
+  /* Base Colors - Pastel Neutrals */
+  --color-background: #faf8ef;
+  --color-board: #bbada0;
+  --color-cell-empty: #cdc1b4;
+  --color-text-dark: #776e65;
+  --color-text-light: #f9f6f2;
+  
+  /* Tile Colors - Progressive Vibrant Scale */
+  --color-tile-2: #eee4da;
+  --color-tile-4: #ede0c8;
+  --color-tile-8: #f2b179;
+  --color-tile-16: #f59563;
+  --color-tile-32: #f67c5f;
+  --color-tile-64: #f65e3b;
+  --color-tile-128: #edcf72;
+  --color-tile-256: #edcc61;
+  --color-tile-512: #edc850;
+  --color-tile-1024: #edc53f;
+  --color-tile-2048: #edc22e;
+  --color-tile-super: #3c3a32; /* For tiles > 2048 */
+  
+  /* Text Colors for Tiles */
+  --color-tile-text-dark: #776e65; /* For light tiles (2, 4) */
+  --color-tile-text-light: #f9f6f2; /* For dark tiles (8+) */
+  
+  /* UI Accent Colors */
+  --color-accent-primary: #8f7a66;
+  --color-accent-success: #65c466;
+  --color-accent-warning: #f59563;
+  --color-accent-error: #f65e3b;
+  
+  /* Button Colors */
+  --color-button-bg: #8f7a66;
+  --color-button-bg-hover: #9f8a76;
+  --color-button-text: #f9f6f2;
+  
+  /* ===================================
+     TYPOGRAPHY
+     =================================== */
+  
+  /* Font Family */
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Courier New', monospace;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  --font-size-6xl: 3.75rem;   /* 60px */
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  
+  /* ===================================
+     SPACING SCALE
+     =================================== */
+  
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;   /* 4px */
+  --spacing-2: 0.5rem;    /* 8px */
+  --spacing-3: 0.75rem;   /* 12px */
+  --spacing-4: 1rem;      /* 16px */
+  --spacing-5: 1.25rem;   /* 20px */
+  --spacing-6: 1.5rem;    /* 24px */
+  --spacing-8: 2rem;      /* 32px */
+  --spacing-10: 2.5rem;   /* 40px */
+  --spacing-12: 3rem;     /* 48px */
+  --spacing-16: 4rem;     /* 64px */
+  --spacing-20: 5rem;     /* 80px */
+  --spacing-24: 6rem;     /* 96px */
+  
+  /* ===================================
+     BORDER RADIUS
+     =================================== */
+  
+  --radius-none: 0;
+  --radius-sm: 0.125rem;  /* 2px */
+  --radius-md: 0.375rem;  /* 6px */
+  --radius-lg: 0.5rem;    /* 8px */
+  --radius-xl: 0.75rem;   /* 12px */
+  --radius-2xl: 1rem;     /* 16px */
+  --radius-3xl: 1.5rem;   /* 24px */
+  --radius-full: 9999px;
+  
+  /* ===================================
+     SHADOWS
+     =================================== */
+  
+  --shadow-none: none;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  
+  /* Tile-specific shadows */
+  --shadow-tile: 0 0 30px 10px rgba(243, 215, 116, 0), inset 0 0 0 1px rgba(255, 255, 255, 0);
+  --shadow-tile-merged: 0 0 30px 10px rgba(243, 215, 116, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  
+  /* ===================================
+     TRANSITIONS & ANIMATIONS
+     =================================== */
+  
+  /* Duration */
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+  
+  /* Easing Functions */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Common Transitions */
+  --transition-colors: color var(--duration-base) var(--ease-in-out),
+                      background-color var(--duration-base) var(--ease-in-out),
+                      border-color var(--duration-base) var(--ease-in-out);
+  --transition-transform: transform var(--duration-base) var(--ease-in-out);
+  --transition-opacity: opacity var(--duration-base) var(--ease-in-out);
+  --transition-all: all var(--duration-base) var(--ease-in-out);
+  
+  /* Game-specific Transitions */
+  --transition-tile-move: transform var(--duration-base) var(--ease-in-out);
+  --transition-tile-appear: transform var(--duration-fast) var(--ease-bounce);
+  --transition-tile-merge: transform var(--duration-fast) var(--ease-bounce);
+  
+  /* ===================================
+     Z-INDEX SCALE
+     =================================== */
+  
+  --z-index-base: 0;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  
+  /* ===================================
+     LAYOUT
+     =================================== */
+  
+  /* Container Widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  
+  /* Grid/Board Dimensions */
+  --board-size: min(500px, 90vw);
+  --grid-gap: 0.75rem;
+  --cell-size: calc((var(--board-size) - (var(--grid-gap) * 5)) / 4);
+  
+  /* ===================================
+     BREAKPOINTS
+     =================================== */
+  
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* ===================================
+   DARK THEME VARIANT (Optional)
+   =================================== */
+
+[data-theme="dark"] {
+  /* Dark theme color overrides */
+  --color-background: #1a1a1a;
+  --color-board: #2d2d2d;
+  --color-cell-empty: #3d3d3d;
+  --color-text-dark: #e0e0e0;
+  --color-text-light: #ffffff;
+  
+  /* Adjust button colors for dark theme */
+  --color-button-bg: #4a4a4a;
+  --color-button-bg-hover: #5a5a5a;
+  
+  /* Enhanced shadows for dark theme */
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* ===================================
+   UTILITY CLASSES (Optional)
+   =================================== */
+
+/* You can use these classes directly in your HTML/React components */
+.font-primary { font-family: var(--font-family-primary); }
+.font-mono { font-family: var(--font-family-mono); }
+
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+.text-3xl { font-size: var(--font-size-3xl); }
+.text-4xl { font-size: var(--font-size-4xl); }
+.text-5xl { font-size: var(--font-size-5xl); }
+.text-6xl { font-size: var(--font-size-6xl); }
+
+.font-light { font-weight: var(--font-weight-light); }
+.font-regular { font-weight: var(--font-weight-regular); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-extrabold { font-weight: var(--font-weight-extrabold); }

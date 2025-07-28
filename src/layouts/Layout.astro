@@ -5,18 +5,16 @@
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>2048 Game</title>
 	</head>
 	<body>
-		<slot />
+		<div class="main-container">
+			<slot />
+		</div>
 	</body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+	/* Import global styles that include fonts, resets, and background */
+	@import '../styles/global.css';
 </style>

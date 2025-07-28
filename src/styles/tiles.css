@@ -1,0 +1,309 @@
+/* ===================================
+   Modernized Tile Styles for 2048 Game
+   =================================== */
+
+/* Base tile styles with softer shadows and larger radius */
+.game__cell {
+  position: relative;
+  transition: transform 120ms ease-out, scale 120ms ease-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  
+  /* Responsive font size using clamp() */
+  /* Min: 20px, Preferred: 7% of board width, Max: 55px */
+  font-size: clamp(1.25rem, 7cqw, 3.4375rem);
+}
+
+/* Animation for new tiles */
+.game__cell--new {
+  animation: pop-in 200ms ease-in-out;
+}
+
+/* Animation for merged tiles */
+.game__cell--merged {
+  animation: merge-bounce 200ms ease-in-out;
+}
+
+/* Movement animations */
+.game__cell--slide-left {
+  animation: slide-left 120ms ease-out;
+}
+
+.game__cell--slide-right {
+  animation: slide-right 120ms ease-out;
+}
+
+.game__cell--slide-up {
+  animation: slide-up 120ms ease-out;
+}
+
+.game__cell--slide-down {
+  animation: slide-down 120ms ease-out;
+}
+
+/* Keyframes for pop-in (spawn) animation */
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Keyframes for merge-bounce animation */
+@keyframes merge-bounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Keyframes for slide animations */
+@keyframes slide-left {
+  from {
+    transform: translateX(110px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-right {
+  from {
+    transform: translateX(-110px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(110px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-110px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ===================================
+   Tile Value Specific Styles
+   =================================== */
+
+/* 2 - Light beige with dark text (WCAG AA compliant) */
+.game__cell-2 {
+  background: #eee4da;
+  color: #776e65;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 4 - Slightly darker beige with dark text (WCAG AA compliant) */
+.game__cell-4 {
+  background: #ede0c8;
+  color: #776e65;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 8 - Orange with white text (WCAG AA compliant) */
+.game__cell-8 {
+  background: #f2b179;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 16 - Darker orange with white text (WCAG AA compliant) */
+.game__cell-16 {
+  background: #f59563;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 32 - Red-orange with white text (WCAG AA compliant) */
+.game__cell-32 {
+  background: #f67c5f;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 64 - Red with white text (WCAG AA compliant) */
+.game__cell-64 {
+  background: #f65e3b;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 128 - Yellow with white text, smaller font (WCAG AA compliant) */
+.game__cell-128 {
+  background: #edcf72;
+  color: #ffffff;
+  font-size: clamp(1.125rem, 6cqw, 3rem);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 256 - Gold with white text, smaller font (WCAG AA compliant) */
+.game__cell-256 {
+  background: #edcc61;
+  color: #ffffff;
+  font-size: clamp(1.125rem, 6cqw, 3rem);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 512 - Bright gold with white text, smaller font (WCAG AA compliant) */
+.game__cell-512 {
+  background: #edc850;
+  color: #ffffff;
+  font-size: clamp(1.125rem, 6cqw, 3rem);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 1024 - Bright yellow with dark text for contrast, smaller font (WCAG AA compliant) */
+.game__cell-1024 {
+  background: #edc53f;
+  color: #3c3a32;
+  font-size: clamp(1rem, 5cqw, 2.5rem);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 2048 - Victory yellow with dark text for contrast, smaller font (WCAG AA compliant) */
+.game__cell-2048 {
+  background: #edc22e;
+  color: #3c3a32;
+  font-size: clamp(1rem, 5cqw, 2.5rem);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  /* Special glow effect for 2048 tile */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15),
+              0 0 20px rgba(237, 194, 46, 0.4);
+}
+
+/* Super tiles (values > 2048) - Dark with white text (WCAG AAA compliant) */
+.game__cell-4096,
+.game__cell-8192,
+.game__cell-16384,
+.game__cell-32768,
+.game__cell-65536 {
+  background: #3c3a32;
+  color: #ffffff;
+  font-size: clamp(0.875rem, 4cqw, 2rem);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15),
+              0 0 30px rgba(60, 58, 50, 0.5);
+}
+
+/* Special state effects */
+.game__cell:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Container query support for responsive font sizing */
+.game__board {
+  container-type: inline-size;
+  container-name: game-board;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .game__cell {
+    /* Adjust clamp values for mobile */
+    font-size: clamp(1rem, 8cqw, 2.5rem);
+  }
+  
+  .game__cell-128,
+  .game__cell-256,
+  .game__cell-512 {
+    font-size: clamp(0.875rem, 7cqw, 2rem);
+  }
+  
+  .game__cell-1024,
+  .game__cell-2048 {
+    font-size: clamp(0.75rem, 6cqw, 1.75rem);
+  }
+  
+  .game__cell-4096,
+  .game__cell-8192,
+  .game__cell-16384,
+  .game__cell-32768,
+  .game__cell-65536 {
+    font-size: clamp(0.625rem, 5cqw, 1.5rem);
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .game__cell {
+    border-radius: 6px;
+    font-size: clamp(0.875rem, 9cqw, 2rem);
+  }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .game__cell {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .game__cell-2,
+[data-theme="dark"] .game__cell-4 {
+  background: #4a453f;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .game__cell-2048 {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3),
+              0 0 25px rgba(237, 194, 46, 0.6);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .game__cell {
+    transition: none;
+  }
+  
+  .game__cell--new,
+  .game__cell--merged,
+  .game__cell--slide-left,
+  .game__cell--slide-right,
+  .game__cell--slide-up,
+  .game__cell--slide-down {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .game__cell-2,
+  .game__cell-4 {
+    color: #000000;
+    font-weight: 800;
+  }
+  
+  .game__cell-8,
+  .game__cell-16,
+  .game__cell-32,
+  .game__cell-64,
+  .game__cell-128,
+  .game__cell-256,
+  .game__cell-512 {
+    background-color: var(--color-tile-8);
+    outline: 2px solid #ffffff;
+    outline-offset: -2px;
+  }
+}
