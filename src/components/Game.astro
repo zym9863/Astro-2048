@@ -1,13 +1,17 @@
 ---
 ---
 
-<section class="game">
+  <section class="game" role="application" aria-label="2048 Game">
   <div class="game__header">
     <h1 class="game__title">2048</h1>
     <div class="game__scores">
-      <div class="game__score">
+      <div class="game__score" role="region" aria-label="Current Score">
         <div class="game__score-title">SCORE</div>
-        <div class="game__score-value">0</div>
+        <div class="game__score-value" aria-live="polite">0</div>
+      </div>
+      <div class="game__score" role="region" aria-label="Best Score">
+        <div class="game__score-title">BEST</div>
+        <div class="game__best-score-value" aria-live="polite">0</div>
       </div>
     </div>
   </div>
@@ -16,39 +20,43 @@
     <p>Join the numbers and get to the <strong>2048 tile!</strong></p>
   </div>
   
-  <div class="game__board">
-    <div class="game__board-row" id="row-0">
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
+  <div class="game__board" role="grid" aria-label="Game Board" aria-describedby="game-instructions">
+    <div class="game__board-row" id="row-0" role="row">
+      <div class="game__cell" role="gridcell" aria-label="Position 1,1"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 1,2"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 1,3"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 1,4"></div>
     </div>
-    <div class="game__board-row" id="row-1">
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
+    <div class="game__board-row" id="row-1" role="row">
+      <div class="game__cell" role="gridcell" aria-label="Position 2,1"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 2,2"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 2,3"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 2,4"></div>
     </div>
-    <div class="game__board-row" id="row-2">
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
+    <div class="game__board-row" id="row-2" role="row">
+      <div class="game__cell" role="gridcell" aria-label="Position 3,1"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 3,2"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 3,3"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 3,4"></div>
     </div>
-    <div class="game__board-row" id="row-3">
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
-      <div class="game__cell"></div>
+    <div class="game__board-row" id="row-3" role="row">
+      <div class="game__cell" role="gridcell" aria-label="Position 4,1"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 4,2"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 4,3"></div>
+      <div class="game__cell" role="gridcell" aria-label="Position 4,4"></div>
     </div>
   </div>
   
-  <div class="game__explanation">
+  <div id="game-instructions" class="game__explanation">
     <p><strong>HOW TO PLAY:</strong> Use your <strong>arrow keys</strong> to move the tiles. When two tiles with the same number touch, they <strong>merge into one!</strong></p>
+    <p><strong>Keyboard shortcuts:</strong> Ctrl+Z to undo, Ctrl+Y to redo. <strong>Mobile:</strong> Swipe to move tiles.</p>
   </div>
   
-  <button class="game__restart-button">New Game</button>
-</section>
+  <div class="game__controls">
+    <button class="game__undo-button" disabled aria-label="Undo last move (Ctrl+Z)">Undo</button>
+    <button class="game__restart-button" aria-label="Start new game">New Game</button>
+    <button class="game__redo-button" disabled aria-label="Redo last undone move (Ctrl+Y)">Redo</button>
+  </div>
 
 <style>
   /* Import the modernized tile styles */
@@ -158,6 +166,43 @@
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
   }
   
+  .game__controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .game__undo-button,
+  .game__redo-button {
+    background: var(--color-button-bg);
+    color: var(--color-button-text);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    min-width: 60px;
+  }
+  
+  .game__undo-button:hover:not(:disabled),
+  .game__redo-button:hover:not(:disabled) {
+    background: var(--color-button-bg-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .game__undo-button:disabled,
+  .game__redo-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+  
   .game__board:focus {
     outline: none;
     box-shadow: 0 0 0 3px var(--color-accent-primary);
@@ -252,141 +297,438 @@
 </style>
 
 <script>
-  // Game state
-  let board = [
+  // TypeScript Type Definitions
+  interface GameBoard {
+    readonly length: 4;
+    [index: number]: [number, number, number, number];
+  }
+  
+  interface GameState {
+    board: GameBoard;
+    score: number;
+    gameOver: boolean;
+    win: boolean;
+    bestScore: number;
+  }
+  
+  interface GameMove {
+    board: GameBoard;
+    score: number;
+    direction: 'left' | 'right' | 'up' | 'down';
+    timestamp: number;
+  }
+  
+  interface GameHistory {
+    moves: GameMove[];
+    currentIndex: number;
+    maxSize: number;
+  }
+  
+  interface TouchState {
+    startX: number;
+    startY: number;
+    startTime: number;
+    isMoving: boolean;
+  }
+  
+  // Constants
+  const STORAGE_KEYS = {
+    GAME_STATE: 'astro-2048-game-state',
+    BEST_SCORE: 'astro-2048-best-score',
+    GAME_HISTORY: 'astro-2048-game-history'
+  } as const;
+  
+  const MAX_HISTORY_SIZE = 50;
+  const MIN_SWIPE_DISTANCE = 30; // pixels
+  const MAX_SWIPE_TIME = 300; // milliseconds
+  
+  // Game state with proper typing
+  let board: GameBoard = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0]
   ];
   
-  let previousBoard: number[][] = [];
+  let previousBoard: GameBoard | null = null;
   let score = 0;
   let gameOver = false;
   let win = false;
   let isMoving = false; // Debounce flag to prevent input during animations
+  let bestScore = 0;
+  let gameHistory: GameHistory = {
+    moves: [],
+    currentIndex: -1,
+    maxSize: MAX_HISTORY_SIZE
+  };
+  let touchState: TouchState | null = null;
+  
+  // Game State Persistence Functions
+  function saveGameState(): void {
+    try {
+      const gameState: GameState = {
+        board: copyBoard(board),
+        score,
+        gameOver,
+        win,
+        bestScore
+      };
+      localStorage.setItem(STORAGE_KEYS.GAME_STATE, JSON.stringify(gameState));
+    } catch (error) {
+      console.warn('Failed to save game state:', error);
+    }
+  }
+  
+  function loadGameState(): boolean {
+    try {
+      const savedState = localStorage.getItem(STORAGE_KEYS.GAME_STATE);
+      if (savedState) {
+        const gameState: GameState = JSON.parse(savedState);
+        if (validateGameState(gameState)) {
+          board = gameState.board;
+          score = gameState.score;
+          gameOver = gameState.gameOver;
+          win = gameState.win;
+          bestScore = gameState.bestScore;
+          return true;
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to load game state:', error);
+    }
+    return false;
+  }
+  
+  function clearGameState(): void {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.GAME_STATE);
+      localStorage.removeItem(STORAGE_KEYS.GAME_HISTORY);
+    } catch (error) {
+      console.warn('Failed to clear game state:', error);
+    }
+  }
+  
+  function validateGameState(state: any): state is GameState {
+    return (
+      state &&
+      typeof state === 'object' &&
+      Array.isArray(state.board) &&
+      state.board.length === 4 &&
+      state.board.every((row: any) => 
+        Array.isArray(row) && 
+        row.length === 4 &&
+        row.every((cell: any) => typeof cell === 'number')
+      ) &&
+      typeof state.score === 'number' &&
+      typeof state.gameOver === 'boolean' &&
+      typeof state.win === 'boolean' &&
+      typeof state.bestScore === 'number'
+    );
+  }
+  
+  // Best Score Functions
+  function getBestScore(): number {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.BEST_SCORE);
+      return saved ? parseInt(saved, 10) : 0;
+    } catch (error) {
+      console.warn('Failed to load best score:', error);
+      return 0;
+    }
+  }
+  
+  function setBestScore(newScore: number): void {
+    try {
+      bestScore = Math.max(bestScore, newScore);
+      localStorage.setItem(STORAGE_KEYS.BEST_SCORE, bestScore.toString());
+      updateBestScoreDisplay();
+    } catch (error) {
+      console.warn('Failed to save best score:', error);
+    }
+  }
+  
+  function updateBestScoreDisplay(): void {
+    const bestScoreElement = document.querySelector('.game__best-score-value');
+    if (bestScoreElement) {
+      bestScoreElement.textContent = bestScore.toString();
+    }
+  }
+  
+  // Game History Functions (Undo/Redo)
+  function saveMoveToHistory(direction: 'left' | 'right' | 'up' | 'down'): void {
+    const move: GameMove = {
+      board: copyBoard(previousBoard || board),
+      score: score,
+      direction,
+      timestamp: Date.now()
+    };
+    
+    // Remove any moves after current index (when user has undone)
+    gameHistory.moves = gameHistory.moves.slice(0, gameHistory.currentIndex + 1);
+    
+    // Add new move
+    gameHistory.moves.push(move);
+    gameHistory.currentIndex = gameHistory.moves.length - 1;
+    
+    // Limit history size
+    if (gameHistory.moves.length > gameHistory.maxSize) {
+      gameHistory.moves.shift();
+      gameHistory.currentIndex--;
+    }
+    
+    // Save to localStorage
+    try {
+      localStorage.setItem(STORAGE_KEYS.GAME_HISTORY, JSON.stringify(gameHistory));
+    } catch (error) {
+      console.warn('Failed to save game history:', error);
+    }
+    
+    updateUndoRedoButtons();
+  }
+  
+  function canUndo(): boolean {
+    return gameHistory.currentIndex >= 0;
+  }
+  
+  function canRedo(): boolean {
+    return gameHistory.currentIndex < gameHistory.moves.length - 1;
+  }
+  
+  function undoMove(): boolean {
+    if (!canUndo()) return false;
+    
+    const move = gameHistory.moves[gameHistory.currentIndex];
+    gameHistory.currentIndex--;
+    
+    // Restore game state
+    board = copyBoard(move.board);
+    score = move.score;
+    gameOver = false; // Reset game over state when undoing
+    
+    updateDisplay(false);
+    updateUndoRedoButtons();
+    saveGameState();
+    
+    return true;
+  }
+  
+  function redoMove(): boolean {
+    if (!canRedo()) return false;
+    
+    gameHistory.currentIndex++;
+    const move = gameHistory.moves[gameHistory.currentIndex];
+    
+    // Apply the move (we need to simulate it)
+    board = copyBoard(move.board);
+    score = move.score;
+    
+    // Re-apply the move direction to get to the next state
+    let moved = false;
+    switch (move.direction) {
+      case 'left':
+        moved = moveLeft();
+        break;
+      case 'right':
+        moved = moveRight();
+        break;
+      case 'up':
+        moved = moveUp();
+        break;
+      case 'down':
+        moved = moveDown();
+        break;
+    }
+    
+    if (moved) {
+      updateDisplay(true);
+      updateUndoRedoButtons();
+      saveGameState();
+    }
+    
+    return moved;
+  }
+  
+  function updateUndoRedoButtons(): void {
+    const undoButton = document.querySelector('.game__undo-button') as HTMLButtonElement;
+    const redoButton = document.querySelector('.game__redo-button') as HTMLButtonElement;
+    
+    if (undoButton) {
+      undoButton.disabled = !canUndo();
+      undoButton.style.opacity = canUndo() ? '1' : '0.5';
+    }
+    
+    if (redoButton) {
+      redoButton.disabled = !canRedo();
+      redoButton.style.opacity = canRedo() ? '1' : '0.5';
+    }
+  }
+  
+  function loadGameHistory(): void {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.GAME_HISTORY);
+      if (saved) {
+        const history = JSON.parse(saved);
+        if (history && Array.isArray(history.moves) && typeof history.currentIndex === 'number') {
+          gameHistory = history;
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to load game history:', error);
+      gameHistory = { moves: [], currentIndex: -1, maxSize: MAX_HISTORY_SIZE };
+    }
+    updateUndoRedoButtons();
+  }
   
   // DOM elements
   const scoreElement = document.querySelector('.game__score-value');
   const boardElement = document.querySelector('.game__board');
   
   // Helper function to deep copy the board
-  function copyBoard(src: number[][]) {
-    return src.map(row => [...row]);
+  function copyBoard(src: GameBoard | number[][]): GameBoard {
+    return src.map(row => [...row]) as GameBoard;
   }
   
   // Update board display with animations
   function updateDisplay(animate = false) {
-    // Update score
-    if (scoreElement) {
-      scoreElement.textContent = score.toString();
-    }
-    
-    // Clear all animation classes first
-    const allCells = document.querySelectorAll('.game__cell');
-    allCells.forEach(cell => {
-      cell.classList.remove('game__cell--new', 'game__cell--merged', 
-                           'game__cell--slide-left', 'game__cell--slide-right',
-                           'game__cell--slide-up', 'game__cell--slide-down');
-    });
-    
-    // Update board cells
-    const rows = document.querySelectorAll('.game__board-row');
-    rows.forEach((row, rowIndex) => {
-      const cells = row.querySelectorAll('.game__cell');
-      cells.forEach((cell, colIndex) => {
-        const value = board[rowIndex][colIndex];
-        const prevValue = previousBoard[rowIndex] ? previousBoard[rowIndex][colIndex] : 0;
-        
-        // Update cell content and classes
-        cell.textContent = value !== 0 ? value.toString() : '';
-        cell.className = `game__cell ${value !== 0 ? `game__cell-${value}` : ''}`;
-        
-        // Add animation classes if animating
-        if (animate && value !== 0) {
-          // Check if this is a new tile
-          if (prevValue === 0 && value !== 0) {
-            cell.classList.add('game__cell--new');
-          }
-          // Check if this tile was merged
-          else if (value > prevValue && prevValue !== 0) {
-            cell.classList.add('game__cell--merged');
-          }
-        }
+    try {
+      // Update score with ARIA live region support
+      if (scoreElement) {
+        scoreElement.textContent = score.toString();
+        // Announce score change to screen readers
+        scoreElement.setAttribute('aria-label', `Current score: ${score}`);
+      }
+      
+      // Clear all animation classes first
+      const allCells = document.querySelectorAll('.game__cell');
+      allCells.forEach(cell => {
+        cell.classList.remove('game__cell--new', 'game__cell--merged', 
+                             'game__cell--slide-left', 'game__cell--slide-right',
+                             'game__cell--slide-up', 'game__cell--slide-down');
       });
-    });
-    
-    // Show game over or win message
-    let gameMessage = document.querySelector('.game__message');
-    if (gameMessage) {
-      gameMessage.remove();
-    }
-    
-    if (gameOver && boardElement) {
-      gameMessage = document.createElement('div');
-      gameMessage.className = 'game__message game__message--game-over';
-      gameMessage.innerHTML = `
-        <p>Game Over!</p>
-        <button class="game__try-again-button">Try Again</button>
-      `;
-      boardElement.appendChild(gameMessage);
-      const tryAgainButton = gameMessage.querySelector('.game__try-again-button');
-      if (tryAgainButton) {
-        tryAgainButton.addEventListener('click', initializeGame);
+      
+      // Update board cells with ARIA support
+      const rows = document.querySelectorAll('.game__board-row');
+      rows.forEach((row, rowIndex) => {
+        const cells = row.querySelectorAll('.game__cell');
+        cells.forEach((cell, colIndex) => {
+          const value = board[rowIndex][colIndex];
+          const prevValue = previousBoard && previousBoard[rowIndex] ? previousBoard[rowIndex][colIndex] : 0;
+          
+          // Update cell content and classes
+          cell.textContent = value !== 0 ? value.toString() : '';
+          cell.className = `game__cell ${value !== 0 ? `game__cell-${value}` : ''}`;
+          
+          // Update ARIA label for accessibility
+          const ariaLabel = value !== 0 ? `Tile with value ${value} at position ${rowIndex + 1},${colIndex + 1}` : `Empty tile at position ${rowIndex + 1},${colIndex + 1}`;
+          cell.setAttribute('aria-label', ariaLabel);
+          
+          // Add animation classes if animating
+          if (animate && value !== 0) {
+            // Check if this is a new tile
+            if (prevValue === 0 && value !== 0) {
+              cell.classList.add('game__cell--new');
+            }
+            // Check if this tile was merged
+            else if (value > prevValue && prevValue !== 0) {
+              cell.classList.add('game__cell--merged');
+            }
+          }
+        });
+      });
+      
+      // Show game over or win message
+      let gameMessage = document.querySelector('.game__message');
+      if (gameMessage) {
+        gameMessage.remove();
       }
-    } else if (win && !document.querySelector('.game__message--game-won') && boardElement) {
-      gameMessage = document.createElement('div');
-      gameMessage.className = 'game__message game__message--game-won';
-      gameMessage.innerHTML = `
-        <p>You Win!</p>
-        <button class="game__try-again-button">Play Again</button>
-      `;
-      boardElement.appendChild(gameMessage);
-      const playAgainButton = gameMessage.querySelector('.game__try-again-button');
-      if (playAgainButton) {
-        playAgainButton.addEventListener('click', initializeGame);
+      
+      if (gameOver && boardElement) {
+        gameMessage = document.createElement('div');
+        gameMessage.className = 'game__message game__message--game-over';
+        gameMessage.setAttribute('role', 'alert');
+        gameMessage.setAttribute('aria-live', 'assertive');
+        gameMessage.innerHTML = `
+          <p>Game Over!</p>
+          <button class="game__try-again-button" aria-label="Start a new game">Try Again</button>
+        `;
+        boardElement.appendChild(gameMessage);
+        const tryAgainButton = gameMessage.querySelector('.game__try-again-button');
+        if (tryAgainButton) {
+          tryAgainButton.addEventListener('click', initializeGame);
+        }
+      } else if (win && !document.querySelector('.game__message--game-won') && boardElement) {
+        gameMessage = document.createElement('div');
+        gameMessage.className = 'game__message game__message--game-won';
+        gameMessage.setAttribute('role', 'alert');
+        gameMessage.setAttribute('aria-live', 'assertive');
+        gameMessage.innerHTML = `
+          <p>You Win!</p>
+          <button class="game__try-again-button" aria-label="Start a new game">Play Again</button>
+        `;
+        boardElement.appendChild(gameMessage);
+        const playAgainButton = gameMessage.querySelector('.game__try-again-button');
+        if (playAgainButton) {
+          playAgainButton.addEventListener('click', initializeGame);
+        }
       }
+    } catch (error) {
+      console.error('Error updating display:', error);
     }
   }
   
   function initializeGame() {
-    // Initialize board
-    board = [
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]
-    ];
+    // Try to load saved game state first
+    if (!loadGameState()) {
+      // Initialize new game if no saved state
+      board = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ];
+      
+      previousBoard = copyBoard(board);
+      
+      // Add two initial tiles
+      addRandomTile();
+      addRandomTile();
+      
+      score = 0;
+      gameOver = false;
+      win = false;
+    }
     
-    previousBoard = copyBoard(board);
-    
-    // Add two initial tiles
-    addRandomTile();
-    addRandomTile();
-    
-    score = 0;
-    gameOver = false;
-    win = false;
+    // Load best score and history
+    bestScore = getBestScore();
+    loadGameHistory();
     isMoving = false;
     
     updateDisplay(false);
+    updateBestScoreDisplay();
   }
   
-  function addRandomTile() {
-    // Find all empty cells
-    const emptyCells = [];
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
-        if (board[i][j] === 0) {
-          emptyCells.push({ row: i, col: j });
+  function addRandomTile(): boolean {
+    try {
+      // Find all empty cells
+      const emptyCells: { row: number; col: number }[] = [];
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+          if (board[i][j] === 0) {
+            emptyCells.push({ row: i, col: j });
+          }
         }
       }
-    }
-    
-    // Add 2 or 4 to a random empty cell
-    if (emptyCells.length > 0) {
-      const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-      board[randomCell.row][randomCell.col] = Math.random() < 0.9 ? 2 : 4;
+      
+      // Add 2 or 4 to a random empty cell
+      if (emptyCells.length > 0) {
+        const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        board[randomCell.row][randomCell.col] = Math.random() < 0.9 ? 2 : 4;
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error adding random tile:', error);
+      return false;
     }
   }
   
@@ -631,7 +973,7 @@
     if (gameOver || isMoving) return;
     
     let moved = false;
-    let direction = '';
+    let direction: 'left' | 'right' | 'up' | 'down' | '' = '';
     
     switch (event.key) {
       case 'ArrowLeft':
@@ -654,13 +996,39 @@
         moved = moveDown();
         direction = 'down';
         break;
+      case 'z':
+      case 'Z':
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
+          if (event.shiftKey) {
+            redoMove();
+          } else {
+            undoMove();
+          }
+          return;
+        }
+        break;
+      case 'y':
+      case 'Y':
+        if (event.ctrlKey || event.metaKey) {
+          event.preventDefault();
+          redoMove();
+          return;
+        }
+        break;
       default:
         return;
     }
     
     // If tiles moved, animate and add new tile
-    if (moved) {
+    if (moved && direction) {
       isMoving = true;
+      
+      // Save move to history
+      saveMoveToHistory(direction);
+      
+      // Update best score
+      setBestScore(score);
       
       // First update display to show movement
       updateDisplay(false);
@@ -671,6 +1039,7 @@
         addRandomTile();
         gameOver = isGameOver();
         updateDisplay(true); // Show new tile with animation
+        saveGameState(); // Save the new state
         
         // Re-enable input after all animations complete
         setTimeout(() => {
@@ -680,13 +1049,120 @@
     }
   }
   
+  // Touch Gesture Functions
+  function handleTouchStart(event: TouchEvent): void {
+    if (gameOver || isMoving) return;
+    
+    const touch = event.touches[0];
+    touchState = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      startTime: Date.now(),
+      isMoving: false
+    };
+  }
+  
+  function handleTouchMove(event: TouchEvent): void {
+    if (!touchState || gameOver || isMoving) return;
+    
+    event.preventDefault();
+    touchState.isMoving = true;
+  }
+  
+  function handleTouchEnd(event: TouchEvent): void {
+    if (!touchState || gameOver || isMoving || !touchState.isMoving) {
+      touchState = null;
+      return;
+    }
+    
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchState.startX;
+    const deltaY = touch.clientY - touchState.startY;
+    const deltaTime = Date.now() - touchState.startTime;
+    
+    // Check if swipe is valid
+    if (deltaTime > MAX_SWIPE_TIME) {
+      touchState = null;
+      return;
+    }
+    
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+    
+    // Determine swipe direction
+    let direction: 'left' | 'right' | 'up' | 'down' | null = null;
+    let moved = false;
+    
+    if (absX > absY && absX > MIN_SWIPE_DISTANCE) {
+      // Horizontal swipe
+      direction = deltaX > 0 ? 'right' : 'left';
+    } else if (absY > absX && absY > MIN_SWIPE_DISTANCE) {
+      // Vertical swipe
+      direction = deltaY > 0 ? 'down' : 'up';
+    }
+    
+    if (direction) {
+      isMoving = true;
+      
+      // Save current state for history
+      previousBoard = copyBoard(board);
+      
+      switch (direction) {
+        case 'left':
+          moved = moveLeft();
+          break;
+        case 'right':
+          moved = moveRight();
+          break;
+        case 'up':
+          moved = moveUp();
+          break;
+        case 'down':
+          moved = moveDown();
+          break;
+      }
+      
+      if (moved) {
+        // Save move to history
+        saveMoveToHistory(direction);
+        
+        // Update best score
+        setBestScore(score);
+        
+        // Update display and add new tile
+        updateDisplay(false);
+        applySlideAnimation(direction);
+        
+        setTimeout(() => {
+          addRandomTile();
+          gameOver = isGameOver();
+          updateDisplay(true);
+          saveGameState();
+          
+          setTimeout(() => {
+            isMoving = false;
+          }, 200);
+        }, 120);
+      } else {
+        isMoving = false;
+      }
+    }
+    
+    touchState = null;
+  }
+  
   // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     // Add keyboard event listener
     document.addEventListener('keydown', handleKeyDown);
     
-    // Make board focusable
+    // Add touch event listeners for mobile support
     if (boardElement) {
+      boardElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+      boardElement.addEventListener('touchmove', handleTouchMove, { passive: false });
+      boardElement.addEventListener('touchend', handleTouchEnd, { passive: false });
+      
+      // Make board focusable
       boardElement.setAttribute('tabindex', '0');
       (boardElement as HTMLElement).focus();
     }
@@ -694,7 +1170,21 @@
     // Add restart button event
     const restartButton = document.querySelector('.game__restart-button');
     if (restartButton) {
-      restartButton.addEventListener('click', initializeGame);
+      restartButton.addEventListener('click', () => {
+        clearGameState();
+        initializeGame();
+      });
+    }
+    
+    // Add undo/redo button events
+    const undoButton = document.querySelector('.game__undo-button');
+    if (undoButton) {
+      undoButton.addEventListener('click', undoMove);
+    }
+    
+    const redoButton = document.querySelector('.game__redo-button');
+    if (redoButton) {
+      redoButton.addEventListener('click', redoMove);
     }
     
     // Initialize game
